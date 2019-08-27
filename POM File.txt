@@ -1,0 +1,357 @@
+Base Class:
+
+public class BaseClass {
+	static WebDriver driver;
+	public static WebDriver getDriver() {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\Dr.Kamaraj\\eclipse-workspace\\ReadWrite\\div\\chromedriver.exe");
+		driver=new ChromeDriver();
+		return driver;
+	}
+	
+	public static void Url(String Url) 
+	{
+		driver.get(Url);
+	}
+	public static void type(WebElement e, String name) {
+		e.sendKeys(name);
+		
+	}
+public static void btn(WebElement w) {
+w.click();
+}
+
+public static void selectByValue(WebElement e, String n) {
+new Select(e).selectByValue(n);
+}
+public static void selectByIndex(WebElement e,int j) {
+	
+	new Select(e).selectByIndex(j);
+}
+ 
+public static void selectByVisibleText(WebElement e,String n)
+{
+	new Select(e).selectByVisibleText(n);
+}
+public static void doubleClick(WebElement e) {
+	new Actions(driver).doubleClick(e).perform();
+}
+public static void rightClick(WebElement w) {
+	new Actions(driver).contextClick(w).perform();
+}
+
+
+public static void order(int rowNo, int cellNo, String orderNo) throws IOException {
+	File ff=new File("C:\\Users\\Dr.Kamaraj\\eclipse-workspace\\ReadWrite\\xel\\POMExcel.xlsx");
+	FileInputStream fsi=new FileInputStream(ff);
+	Workbook wb=new XSSFWorkbook(fsi);
+	Sheet she=wb.getSheet("Sheeta");
+	Row rr = she.getRow(rowNo);
+	Cell cc = rr.createCell(cellNo);
+	cc.setCellValue(orderNo);
+	FileOutputStream fos=new FileOutputStream(ff);
+	wb.write(fos);
+	
+}
+	public static String getData(int rowNo, int cellNo) throws IOException{
+	File f=new File("C:\\Users\\Dr.Kamaraj\\eclipse-workspace\\ReadWrite\\xel\\POMExcel.xlsx");
+	FileInputStream s=new FileInputStream(f);
+	Workbook w=new XSSFWorkbook(s);
+	Sheet ss=w.getSheet("Sheeta");
+	Row r=ss.getRow(rowNo);
+	Cell c=r.getCell(cellNo);
+	int type =c.getCellType();
+	String name=null;
+	if(type==1) {
+		 name = c.getStringCellValue();
+		System.out.println(name);
+	}
+if(type==0) {
+	if(DateUtil.isCellDateFormatted(c)) {
+		java.util.Date date = c.getDateCellValue();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yy");
+		sdf.format(date);
+	}else {
+		
+	
+	double d=c.getNumericCellValue();
+	long l=(long)d;
+			name = String.valueOf(l);
+	}
+}
+return name;
+
+	}
+
+
+}
+
+POM Main:
+
+
+package org.cts.tester.ReadWrite;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+public class PomMain  extends BaseClass{
+	public static void main(String[] args) throws InterruptedException {
+		 getDriver();
+		Url("http://www.adactin.com/HotelApp/");
+		driver.manage().window().maximize();
+		
+		Thread.sleep(2000);
+		Login log=new Login();
+		type(log.gettxtUserName(),"rubysherly");
+		type(log.gettxtPass(),"Ruby@1993");
+		btn(log.button());
+		
+		
+		Thread.sleep(2000);
+		SecondPage page=new SecondPage();
+        selectByVisibleText(page.getlocation(),"London");
+        selectByVisibleText(page.gethotel(),"Hotel Creek");
+        selectByVisibleText(page.getroomtype(),"Double");
+        selectByVisibleText(page.getnrooms(),"2 - Two");
+        selectByVisibleText(page.getadultroom(),"2 - Two");    
+        selectByVisibleText(page.getchildroom(),"3 - Three");
+        btn(page.submit());
+        
+		Thread.sleep(2000);
+        ThirdPage tpage=new ThirdPage();
+        btn(tpage.getrbutton());
+        btn(tpage.getcon());
+        
+		Thread.sleep(2000);
+        FourthPage fpage=new FourthPage();
+        type(fpage.getfirstname(),"Aishwarya");
+        type(fpage.getlastname(),"Sukumar");
+        type(fpage.getaddress(),"Chennai");
+        type(fpage.getccno(),"12345678976523456");
+        selectByVisibleText(fpage.getcctype(),"Master Card");
+        selectByVisibleText(fpage.getemonth(),"May");
+        selectByVisibleText(fpage.geteyear(),"2020");
+        type(fpage.getcnumber(),"123");
+        btn(fpage.booknow());
+        
+        
+}
+}
+
+POM First:
+
+public class Login extends BaseClass {
+	public Login() {
+		PageFactory.initElements(driver,this);		
+	}
+       @FindBy(id="username")
+      private WebElement txtUserName;
+       
+       @FindBy(id="password")
+      private WebElement txtPass;
+       
+       @FindBy(id="login")
+     private WebElement button;
+       
+public WebElement gettxtUserName() {
+		return txtUserName;
+	}
+
+	public WebElement gettxtPass() {
+		return txtPass;
+	}
+	public WebElement button() {
+		return button;
+	}
+
+	
+
+}
+
+POM SECOND PAGE:
+
+public class SecondPage extends BaseClass {
+	public SecondPage() {
+		PageFactory.initElements(driver, this);
+	}
+	@FindBy(id="location")
+	private WebElement location;
+	
+	@FindBy(id="hotels")
+	private WebElement hotel;
+	
+	@FindBy(id="room_type")
+	private WebElement roomtype;
+	
+	@FindBy(id="room_nos")
+	private WebElement nrooms;
+	
+	//@FindBy(id="datepick_in")
+//	private WebElement checkIn;
+	
+//	@FindBy(id="datepick_out")
+	//private WebElement checkOut;
+	
+	@FindBy(id="adult_room")
+	private WebElement adultroom;
+	
+	@FindBy(id="child_room")
+	private WebElement childroom;
+	
+	@FindBy(id="Submit")
+	private WebElement  submit;
+
+	public WebElement getlocation() {
+		return location;
+	}
+
+	public WebElement gethotel() {
+		return hotel;
+	}
+	public WebElement getroomtype() {
+		return roomtype;
+	}
+
+   
+    
+	public WebElement getadultroom() {
+		return adultroom;
+	}
+
+	public WebElement getnrooms() {
+		return nrooms;
+	}
+
+	public WebElement getchildroom() {
+		return childroom;
+	}
+	
+	
+
+	public WebElement submit() {
+		return submit;
+	}
+	
+}
+
+
+POM Third Page:
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class ThirdPage extends BaseClass {
+	public ThirdPage() {
+		PageFactory.initElements(driver, this);
+	}
+	
+	
+	@FindBy(id="radiobutton_0")
+	private WebElement rbutton;
+	
+	@FindBy(id="continue")
+	private WebElement con;
+
+
+	public WebElement getrbutton() {
+		
+		return rbutton;
+	}
+
+
+	public WebElement getcon() {
+		return con;
+	}
+
+}
+
+
+POM FOURTH:
+
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class FourthPage extends BaseClass{
+	public FourthPage() {
+		PageFactory.initElements(driver, this);
+	}
+	
+	@FindBy(id="first_name")
+	private WebElement firstname;
+
+	
+	@FindBy(id="last_name")
+	private WebElement lastname;
+	
+	@FindBy(id="address")
+	private WebElement address;
+	
+	@FindBy(id="cc_num")
+	private WebElement ccno;
+	
+	@FindBy(id="cc_type")
+	private WebElement cctype;
+	
+	@FindBy(id="cc_exp_month")
+	private WebElement emonth;
+	
+	@FindBy(id="cc_exp_year")
+	private WebElement eyear;
+	
+	@FindBy(id="cc_cvv")
+	private WebElement cnumber;
+	
+	
+	@FindBy(id="book_now")
+	private WebElement booknow;
+
+
+	public WebElement getfirstname() {
+		return firstname;
+	}
+
+
+	public WebElement getlastname() {
+		return lastname;
+	}
+
+
+	public WebElement getaddress() {
+		return address;
+	}
+
+
+	public WebElement getccno() {
+		return ccno;
+	}
+
+
+	public WebElement getcctype() {
+		return cctype;
+	}
+
+
+	public WebElement getemonth() {
+		// TODO Auto-generated method stub
+		return emonth;
+	}
+
+
+	public WebElement geteyear() {
+		// TODO Auto-generated method stub
+		return eyear;
+	}
+
+
+	public WebElement getcnumber() {
+		// TODO Auto-generated method stub
+		return cnumber;
+	}
+
+
+	public WebElement booknow() {
+		// TODO Auto-generated method stub
+		return booknow;
+	}
+}

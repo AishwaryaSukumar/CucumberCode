@@ -1,0 +1,95 @@
+public static Map<String,Repo> td() {
+	Map<String,Repo> emp=new LinkedHashMap<String,Repo>();
+	Connection con=null;
+	try {
+		//load the url
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		
+		//connection to database
+		 con= DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:Xe","HR","admin");
+		 
+		 //write sql query
+		 String sql="select * from adactin";
+		 
+		 PreparedStatement ps = con.prepareCall(sql);
+		 
+		 //execute query
+		 ResultSet rs = ps.executeQuery();
+		
+		 //iterate results
+		 while(rs.next()) {
+			 Repo r=new Repo();
+		 String user = rs.getString("User_Name");
+		 String pass = rs.getString("Password ");
+		 String location = rs.getString("Location ");
+		 String hotel = rs.getString("Hotels ");
+		 String roomtype = rs.getString("Room_Type");
+		 String noofroom = rs.getString("No_Of_Rooms");
+		 String adultroom = rs.getString("Adults_Per_Room");
+         String childrenroom = rs.getString("Children_Per_Room");
+         String fname = rs.getString("First_name");
+         String lname = rs.getString("Last_Name");
+         String billing = rs.getString("Billing ");
+         String ccno = rs.getString("Credit_Card_No");
+         String cctype = rs.getString("CCType ");
+         String emon = rs.getString("Expiry_Month");
+         String eyear = rs.getString("Expiry_Year");
+         String cvv = rs.getString("Cvv");
+         r.setUser(user);
+         r.setPass(pass);
+         r.setLocation(location);
+         r.setHotel(hotel);
+         r.setRoomtype(roomtype);
+         r.setNrooms(noofroom);
+         r.setAdultroom(adultroom);
+         r.setChildroom(childrenroom);
+         r.setFirstname(fname);
+         r.setLastname(lname);
+         r.setAddress(billing);
+         r.setCcno(ccno);
+         r.setCctype(cctype);
+         r.setEmonth(emon);
+         r.setAddress(eyear);
+         r.setCnumber(cvv);
+         emp.put(user, r);
+         emp.put(pass, r);
+         emp.put(location, r);
+         emp.put(hotel, r);
+         emp.put(roomtype, r);
+         emp.put(noofroom, r);
+         emp.put(adultroom, r);
+         emp.put(childrenroom, r);
+         emp.put(fname, r);
+         emp.put(lname, r);
+         emp.put(billing, r);
+         emp.put(ccno, r);
+         emp.put(cctype, r);
+         emp.put(emon, r);
+         emp.put(eyear, r);
+         emp.put(cvv, r);
+
+ }
+	}
+	
+        		 catch(ClassNotFoundException e) {
+			 e.printStackTrace();
+		 }
+		 catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 finally {
+			 try {
+				 con.close();
+			 }
+			 catch(SQLException e) {
+				e.printStackTrace();
+			 }
+		 }
+		 return emp;
+	}
+}
+
+
+	
+	
+

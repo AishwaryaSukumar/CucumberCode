@@ -1,0 +1,350 @@
+Base Class:
+
+package org.cts.test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+public class Base {
+	static WebDriver driver;
+public static WebDriver getDriver() {
+	System.setProperty("webdriver.chrome.driver","C:\\Users\\Dr.Kamaraj\\eclipse-workspace\\ReadWrite\\div\\chromedriver.exe");
+	driver=new ChromeDriver();
+	return driver;
+}
+
+public static void Url(String Url) 
+{
+	driver.get(Url);
+}
+public static void type(WebElement e, String name) {
+	e.sendKeys(name);
+	
+}
+public static void btn(WebElement w) {
+	w.click();
+}
+
+public static void selectByValue(WebElement e, String n) {
+new Select(e).selectByValue(n);
+}
+public static void selectByIndex(WebElement e,int j) {
+
+new Select(e).selectByIndex(j);
+}
+
+public static void selectByVisibleText(WebElement e,String n)
+{
+new Select(e).selectByVisibleText(n);
+}
+public static void doubleClick(WebElement e) {
+new Actions(driver).doubleClick(e).perform();
+}
+public static void rightClick(WebElement w) {
+new Actions(driver).contextClick(w).perform();
+}
+
+public static void Quit() {
+	driver.quit();
+}
+
+public static void order(int rowNo, int cellNo, String orderNo) throws IOException {
+File ff=new File("C:\\Users\\Dr.Kamaraj\\eclipse-workspace\\MavenFirst\\sheet\\Excel.xls");
+FileInputStream fsi=new FileInputStream(ff);
+Workbook wb=new HSSFWorkbook(fsi);
+Sheet she=wb.getSheet("Sheet1");
+Row rr = she.getRow(rowNo);
+Cell cc = rr.createCell(cellNo);
+cc.setCellValue(orderNo);
+FileOutputStream fos=new FileOutputStream(ff);
+wb.write(fos);
+System.out.println(fos);
+
+}
+public static String getData(int rowNo, int cellNo) throws IOException{
+File f=new File("C:\\Users\\Dr.Kamaraj\\eclipse-workspace\\MavenFirst\\sheet\\Excel.xls");
+FileInputStream s=new FileInputStream(f);
+Workbook w=new HSSFWorkbook(s);
+Sheet ss=w.getSheet("Sheet1");
+Row r=ss.getRow(rowNo);
+Cell c=r.getCell(cellNo);
+int type =c.getCellType();
+String name=null;
+if(type==1) {
+	 name = c.getStringCellValue();
+	System.out.println(name);
+}
+if(type==0) {
+if(DateUtil.isCellDateFormatted(c)) {
+	java.util.Date date = c.getDateCellValue();
+	SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yy");
+	sdf.format(date);
+}else {
+	
+
+double d=c.getNumericCellValue();
+long l=(long)d;
+		name = String.valueOf(l);
+}
+}
+return name;
+
+}
+
+
+}
+
+
+Locator Finding:
+
+package org.cts.test;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class Locators extends Base{
+	public Locators() {
+		PageFactory.initElements(driver, this);	
+	}
+
+    @FindBy(id="username")
+   private WebElement txtUserName;
+    
+    @FindBy(id="password")
+   private WebElement txtPass;
+    
+    @FindBy(id="login")
+  private WebElement button;
+    
+    @FindBy(id="location")
+	private WebElement location;
+	
+	@FindBy(id="hotels")
+	private WebElement hotel;
+	
+	@FindBy(id="room_type")
+	private WebElement roomtype;
+	
+	@FindBy(id="room_nos")
+	private WebElement nrooms;
+	
+	@FindBy(id="adult_room")
+	private WebElement adultroom;
+	
+	@FindBy(id="child_room")
+	private WebElement childroom;
+	
+	@FindBy(id="Submit")
+	private WebElement  submit;
+
+	
+	@FindBy(id="radiobutton_0")
+	private WebElement rbutton;
+	
+	@FindBy(id="continue")
+	private WebElement con;
+	
+	@FindBy(id="first_name")
+	private WebElement firstname;
+
+	
+	@FindBy(id="last_name")
+	private WebElement lastname;
+	
+	@FindBy(id="address")
+	private WebElement address;
+	
+	@FindBy(id="cc_num")
+	private WebElement credit;
+	
+	@FindBy(id="cc_type")
+	private WebElement cardtype;
+	
+	@FindBy(id="cc_exp_month")
+	private WebElement emonth;
+	
+	@FindBy(id="cc_exp_year")
+	private WebElement eyear;
+	
+	@FindBy(id="cc_cvv")
+	private WebElement cardno;
+	
+	
+	@FindBy(id="book_now")
+	private WebElement booknow;
+	
+	@FindBy(id="order_no")
+	private WebElement order;
+
+	public WebElement getTxtUserName() {
+		return txtUserName;
+	}
+
+	public WebElement getTxtPass() {
+		return txtPass;
+	}
+
+	public WebElement button() {
+		return button;
+	}
+
+	public WebElement getLocation() {
+		return location;
+	}
+
+	public WebElement getHotel() {
+		return hotel;
+	}
+
+	public WebElement getRoomType() {
+		return roomtype;
+	}
+
+	public WebElement getNRooms() {
+		return nrooms;
+	}
+
+	public WebElement getAdultRoom() {
+		return adultroom;
+	}
+
+	public WebElement getChildRoom() {
+ return childroom;
+ }
+
+	public WebElement submit() {
+		return submit;
+	}
+
+	public WebElement rbutton() {
+		return rbutton;
+	}
+
+	public WebElement con() {
+		return con;
+	}
+
+	public WebElement getFirstName() {
+		return firstname;
+	}
+
+	public WebElement getLName() {
+		return lastname;
+	}
+
+	public WebElement getAddress() {
+		return address;
+	}
+
+	public WebElement getCredit() {
+		return credit;
+	}
+
+	public WebElement getCardType() {
+		return cardtype;
+	}
+
+	public WebElement getEMonth() {
+		return emonth;
+	}
+
+	public WebElement getEYear() {
+		return eyear;
+	}
+
+	public WebElement getCardNo() {
+		return cardno;
+	}
+
+	public WebElement booknow() {
+		return booknow;
+	}
+public WebElement getOrder() {
+	return order;
+}
+
+
+
+Main Program:
+
+package org.cts.test;
+
+import java.io.IOException;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class abcd extends Base{
+	//public static WebDriver driver;
+	@BeforeClass
+	public static void beforeClass() {
+		getDriver();
+		Url("http://www.adactin.com/HotelApp/");
+		driver.manage().window().maximize();
+		
+	}
+	@AfterClass
+	public static void afterClass() {
+		Quit();
+		
+}
+	@Test
+	public static void test1() throws IOException, InterruptedException {
+		
+		Locators loc=new Locators();
+		
+		type(loc.getTxtUserName(),getData(1,0));
+		type(loc.getTxtPass(),getData(1,1));
+		btn(loc.button());
+		selectByVisibleText(loc.getLocation(),getData(1,2));
+		selectByVisibleText(loc.getHotel(),getData(1,3));
+		selectByVisibleText(loc.getRoomType(),getData(1,4));
+		selectByVisibleText(loc.getNRooms(),getData(1,5));
+		selectByVisibleText(loc.getAdultRoom(),getData(1,6));
+		selectByVisibleText(loc.getChildRoom(),getData(1,7));
+		btn(loc.submit());
+		btn(loc.rbutton());
+		
+		btn(loc.con());
+		
+		type(loc.getFirstName(),getData(1,8));
+		type(loc.getLName(),getData(1,9));
+		type(loc.getAddress(),getData(1,10));
+		type(loc.getCredit(),getData(1,11));
+		selectByVisibleText(loc.getCardType(),getData(1,12));
+		selectByVisibleText(loc.getEMonth(),getData(1,13));
+		selectByVisibleText(loc.getEYear(),getData(1,14));
+        type(loc.getCardNo(),getData(1,15));
+        
+        btn(loc.booknow());
+		
+        Thread.sleep(15000);
+        WebElement or = driver.findElement(By.id("order_no"));      
+        order(1,16,or.getAttribute("value"));
+        String nam = or.getText();
+        System.out.println(nam);
+		
+        
+	}
+
+}
